@@ -1,4 +1,5 @@
 # Javascript
 
-Here I learn about javascript from scratch
-- Big Int Article
+### Wesbos Javascript 30
+- Day I 
+
