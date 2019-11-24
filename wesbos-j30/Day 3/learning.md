@@ -1,0 +1,3 @@
+- CSS variables how to set them for root and other divs
+- CSS varables and clam them to a specific scope
+- Changing them using JS
