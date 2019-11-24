@@ -1,0 +1,3 @@
+- transform-origin: 100%; //Changes the axis on which transform rotates
+- transition: all 0.05s; // Time taken to make a transion between two elements. If made more thantimeinterval unexpected things happen
+- transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1); // time snappine between two transitions
