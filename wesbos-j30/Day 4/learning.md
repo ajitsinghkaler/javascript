@@ -1,0 +1,2 @@
+- Console.table for arrays
+- reduce function intializers
