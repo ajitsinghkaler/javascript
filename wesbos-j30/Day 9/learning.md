@@ -1,0 +1,3 @@
+- `console.dir()` for watching HTMl dom methods
+- `console.groupCollapsed()` and `console.groupEnd()` for grouping console.log()`
+- `console.time()` and `console.timeEnd()` for timimg operations.
