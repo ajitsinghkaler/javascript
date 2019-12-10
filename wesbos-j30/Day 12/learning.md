@@ -1,0 +1,1 @@
+- On keyup event e.key returns the key you press

@@ -1,0 +1,3 @@
+- timeupdate- when video time updates
+- play when video plays
+- pause event on video when video stops
