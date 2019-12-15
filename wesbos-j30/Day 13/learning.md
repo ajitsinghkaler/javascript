@@ -1,0 +1,3 @@
+- window.scrollY - Scrolling done in y direcction not seen in the screen
+- window.innerHeight- Height of viewable window
+- HTMLElement.offsetTop - distance of the current element relative to the top of the parent element according to whih it is offset
