@@ -1,0 +1,3 @@
+- offsetWidth & height: width of element including the height width of padding and border
+- OffsetX & offsetY - provides the offset in the Y coordinate of the mouse pointer between that event and the padding edge of the target node.
+- Add multiple text shadows
