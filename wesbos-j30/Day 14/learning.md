@@ -1,0 +1,1 @@
+-     const dev2 = JSON.parse(JSON.stringify(wes));: poor mans deep copy
