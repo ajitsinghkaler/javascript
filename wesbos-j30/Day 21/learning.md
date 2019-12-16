@@ -1,0 +1,2 @@
+- watchPosition returns a stream of position data
+- coords.heading returns the angle we diverged from true north
