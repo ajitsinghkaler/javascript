@@ -1,0 +1,2 @@
+- passing once to an addeventlistener will only trigger the eventlistner funtion once
+- capturing trigger the function from top down
