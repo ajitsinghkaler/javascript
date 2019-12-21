@@ -1,0 +1,3 @@
+- event.pageX = scroll in x direction in the page
+- offsetLeft = element positon wrt to left of page
+- scrollLeft how much to  scroll in left direction
