@@ -49,3 +49,26 @@ Mathematically, that’s strange. The last result states that "null is greater t
 The reason is that an equality check == and comparisons > < >= <= work differently. Comparisons convert null to a number, treating it as 0. That’s why (3) null >= 0 is true and (1) null > 0 is false.
 
 On the other hand, the equality check == for undefined and null is defined such that, without any conversions, they equal each other and don’t equal anything else. That’s why (2) null == 0 is false.
+
+## Logical operators
+
+- The OR || operator does the following:
+
+Evaluates operands from left to right.
+For each operand, converts it to boolean. If the result is true, stops and returns the original value of that operand.
+If all operands have been evaluated (i.e. all were false), returns the last operand
+
+### Usage
+
+1. Getting the first truthy value from a list of variables or expressions.
+2. Short Circuit Evaluation can be used as an if.
+
+- The AND && operator does the following:
+
+Evaluates operands from left to right.
+For each operand, converts it to a boolean. If the result is false, stops and returns the original value of that operand.
+If all operands have been evaluated (i.e. all were truthy), returns the last operand.
+
+Precedence of AND && is higher than OR ||
+
+- A double NOT !! is sometimes used for converting a value to boolean type.
