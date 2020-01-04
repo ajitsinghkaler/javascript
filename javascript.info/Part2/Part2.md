@@ -72,3 +72,26 @@ If all operands have been evaluated (i.e. all were truthy), returns the last ope
 Precedence of AND && is higher than OR ||
 
 - A double NOT !! is sometimes used for converting a value to boolean type.
+
+## Loops
+
+- No break/continue to the right side of ‘?’
+Please note that syntax constructs that are not expressions cannot be used with the ternary operator ?. In particular, directives such as break/continue aren’t allowed there.
+
+A label is an identifier with a colon before a loop:
+The break `<labelName>` statement in the loop below breaks out to the label
+
+ A label is the only way for break/continue to escape a nested loop to go to an outer one.
+
+## Switch statement
+
+Equality check is always strict
+
+## Functions
+
+Evaluation of default parameters
+In JavaScript, a default parameter is evaluated every time the function is called without the respective parameter.
+
+function showMessage(from, text = anotherFunction()) {}
+
+In anotherFunction() is called every time showMessage() is called without the text parameter.
