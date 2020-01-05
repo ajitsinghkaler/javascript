@@ -95,3 +95,15 @@ In JavaScript, a default parameter is evaluated every time the function is calle
 function showMessage(from, text = anotherFunction()) {}
 
 In anotherFunction() is called every time showMessage() is called without the text parameter.
+
+## Callbacks
+
+The arguments showOk and showCancel of ask are called callback functions or just callbacks.
+
+The idea is that we pass a function and expect it to be “called back” later if necessary.
+
+Difference in function declarion and function expressions
+Function declaration we can use function before it is intrepreted
+Funtion can only be caaled after intrepreter reads it.
+
+In strict mode, when a Function Declaration is within a code block, it’s visible everywhere inside that block. But not outside of it.
