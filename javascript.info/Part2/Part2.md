@@ -107,3 +107,11 @@ Function declaration we can use function before it is intrepreted
 Funtion can only be caaled after intrepreter reads it.
 
 In strict mode, when a Function Declaration is within a code block, it’s visible everywhere inside that block. But not outside of it.
+
+## Variable Naming
+
+A variable name can include:
+
+Letters and digits, but the first character may not be a digit.
+Characters $ and _ are normal, on par with letters.
+Non-Latin alphabets and hieroglyphs are also allowed, but commonly not used.
