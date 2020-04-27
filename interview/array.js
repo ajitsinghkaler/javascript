@@ -27,9 +27,10 @@ class Arr {
     }
 
     pop() {
-        delete this.data[this.length - 1]
+        const element = this.data[this.length - 1];
+        delete this.data[this.length - 1];
         this.length--;
-        return this.data;
+        return element;
     }
 
     insert(index, item) {
@@ -49,9 +50,10 @@ class Arr {
         for (let i = index; i < this.length - 1; i++) {
             this.data[i] = this.data[i + 1];
         }
+        const element = this.data[this.length - 1];
         delete this.data[this.length - 1];
         this.length--;
-        return this.data;
+        return element;
     }
 
     deleteAll(item) {
