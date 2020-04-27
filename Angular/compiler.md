@@ -32,3 +32,23 @@ Modules with exports - Export scope o all module imports. Graph is built and on 
 
 - Template type checking - compile all templates into TS code also called type check blocks.Ts code which is ghost code so cannot show errors in it So comments given of the lines to where to show error.
 
+## From Architecture.md [link](https://github.com/angular/angular/blob/master/packages/compiler/design/architecture.md)
+
+Broadly speaking, The Ivy model is that Angular decorators (@Injectable, etc) are compiled to static properties on the classes (ɵprov). This operation must take place without global program knowledge, and in most cases only with knowledge of that single decorator.
+
+The one exception is @Component, which requires knowledge of the metadata from the @NgModule which declares the component in order to properly generate the component def (ɵcmp).
+
+|----------------------------------> | TypeScript |
+                           |                                    |   .d.ts    |
+                           |                                    |------------|
+                           |
+|------------|          |-----|               |-----|           |------------|
+| TypeScript | -parse-> | AST | ->transform-> | AST | ->print-> | JavaScript |
+|   source   |    |     |-----|       |       |-----|           |   source   |
+|------------|    |        |          |                         |------------|
+                  |    type-check     |
+                  |        |          |
+                  |        v          |
+                  |    |--------|     |
+                  |--> | errors | <---|
+                       |--------|
