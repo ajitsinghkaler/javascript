@@ -207,3 +207,78 @@ To interpret the contents of a template angular needs the pipes, directives, com
 > The process of removing unused code is traditionally referred to as "tree-shaking". To determine what codes are necessary to include, a tree-shakers produces the transitive closure of all the code referenced by the bootstrap function. If the bootstrap code references a module then the tree-shaker will include everything imported or declared into the module.
 >
 > Unfortunately this creates a tree shaking problem. Since there no direct link between the component and types the component references all components, directives, and pipes declared in the module, and *any module imported from the module*, must be available at runtime or risk the template failing to be interpreted correctly. Including everything can lead to a very large program that contains many components the application doesn't actually use.
+
+To avoid the tree shaking problem, components need to know which components, pipes, and directives it depends upon. So, the module could be ignored altogether. The program then needs only contain the types the initial component rendered depends on and on any types those dependencies require.
+
+The process of determining this list is called reference inversion because it inverts the link from the module (which holds the dependencies) to component into a link from the component to its dependencies.
+
+#### Reference Inversion
+
+The `ViewCompiler` must receive as input the selector scope for the component, to solve the tree shaking problem. It should indicate all of the directives and pipes that are in scope for the component.
+
+Then will scan the component's template, and filters the list of all directives and pipes in scope down to those which match elements in the template. This list is then saved as an instruction call which will patch it onto the component's definition. The plan is someday using this we can get rid of NgModule altogether.
+
+The process of reference inversion is to turn a list of selector targets produced by the `TemplateCompiler` to the list of types on which it depends. To do this we require the selector scope which contains a mapping of CSS components declared in components, directives, and pipe names, and their corresponding class.
+
+To get this the for a module the following operations are performed:
+
+1. Add all the type declared in the declarations field.
+2. For each module that is imported.
+   -Add the exported components, directives, and pipes
+   -Repeat these sub-steps for with each exported module
+
+For each type in the list produced above change the selector into a selector matcher that, given a target, produces the type that matches the selector. Here what we have created is a `selector scope`.
+
+Given a selector scope, a dependency list is formed by producing the set of types that are matched in selector scope from the selector target list produced by the `TemplateCompiler`.
+
+Now the only problem left is for the component to find its module.
+
+#### Finding a components module
+
+A component's module is found using the TypeScript language service's `findReferences`. If one of the references is to a class declaration with an `@NgModule` annotation, process the class as described above to produce the selector scope. If the class is the declaration list of the `@NgModule` then use the scope produce for that module.
+
+When processing the `@NgModule` class, the type references can be found using the program's `checker` `getSymbolAtLocation` (potentially calling `getAliasedSymbol` if it is an alias symbol, `SymbolFlags.Alias`) and then using `Symbol`'s `declarations` field to get the list of declarations nodes (there should only be one for a `class`, there can be several for an `interface`).
+
+#### .d.ts modifications
+
+Typescript provides nothing for modifying the .d.ts files. All the Angular operations performed are done and made on parsed AST. We can add delete modify nodes but the type information in the.d.ts files will be emitted from the initial AST and not from the transformed AST.
+
+This leaves us with `WriteFileCallback` as the only option in the typescript compiler where .d.ts file modification is possible. So the .d.ts files are parsed when they are written and we use the transformed AST to coordinate insertion and deletion operations to fix up these files.
+
+### Overall ngtsc architecture
+
+#### Compilation flow
+
+When `ngtsc` starts running, it first parses the `tsconfig.json` file and then creates a `ts.Program`. Several things need to happen before the transforms described above can run:
+
+Metadata must be collected for input source files which contain decorators.
+
+- Resource files listed in @Component decorators must be resolved asynchronously. The CLI, for example, may wish to run Webpack to produce the .css input to the styleUrls property of an @Component.
+- Diagnostics must be run, which creates the TypeChecker and touches every node in the program (an expensive operation).
+- Because resource loading is asynchronous (and in particular, may actually be concurrent via subprocesses), it's desirable to kick off as much resource loading as possible before doing anything expensive.
+
+Thus, the compiler flow looks like:
+
+1. Create the ts.Program
+2. Scan source files for top-level declarations that have trivially detectable @Component annotations. This avoids creating `TypeChecker`.
+3. For each such declaration that has a templateUrl or styleUrls, kick-off resource loading for that URL and adds the Promise to a queue.
+4. Get diagnostics and report any initial error messages. At this point, the TypeChecker is primed.
+5. Do a thorough scan for @Component annotations, using the TypeChecker and the metadata system to resolve any complex expressions.
+6. Wait on all resources to be resolved.
+7. Calculate the set of transforms that need to be applied.
+8. Kick-off Tsickle emits, which runs the transforms.
+9. During the emit callback for .d.ts files, re-parse the emitted .d.ts and merge in any requested changes from the Angular compiler.
+
+> Take a breath that was some hardcore stuff.
+>
+> I will additionally be releasing some small articles on
+>
+> 1. Tsickle
+> 1. Compilation differences in --watch mode
+> 1. Resource loading
+> 1. ngcc
+> 1. Template Type Checking
+>
+> If you want you can check them out.
+
+Additionally, watch Alex Rickabaugh [talk](https://youtu.be/anphffaCZrQ) on the angular compiler you will be able to connect a lot of things from there. Which make up for a better understanding.
