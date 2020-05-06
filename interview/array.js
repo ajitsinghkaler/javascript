@@ -57,7 +57,7 @@ class Arr {
     }
 
     deleteAll(item) {
-        const temp = Object.values(this.data).filter(value=> value!==item)
+        const temp = Object.values(this.data).filter(value => value !== item)
         this.data = {}
 
         for (const key in temp) {
@@ -69,12 +69,12 @@ class Arr {
 
     removeAll(item) {
         let index = 0;
-        for(const key in this.data){
-            if(this.data[key]===item) continue;
+        for (const key in this.data) {
+            if (this.data[key] === item) continue;
             this.data[index] = this.data[key]
             index++;
         }
-        for(let i = index; i<this.length;i++){
+        for (let i = index; i < this.length; i++) {
             delete this.data[i]
         }
         this.length = index;
