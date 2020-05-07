@@ -26,7 +26,7 @@ class LinkedList {
     //  value_at(index) - returns the value of the nth item (starting at 0 for first)
     value_at(index) {
 
-        if (index < 0 && index > this.size) {
+        if (index < 0 || index > this.size - 1) {
             throw "Index out of bounds";
         }
         let current = this.head;
@@ -137,7 +137,7 @@ class LinkedList {
 
     //  erase(index) - removes node at given index
     erase(index) {
-        if (index < 0 && index > this.size && !this.size) {
+        if (index < 0 || index > this.size - 1 || !this.size) {
             throw "Index out of bounds";
         }
         let current = this.head;
@@ -146,16 +146,20 @@ class LinkedList {
             this.head = null;
             return;
         }
+        if (index === 0) {
+            this.head = this.head.next;
+            return;
+        }
         let prev;
         for (let i = 0; i < index; i++) {
             prev = current;
             current = current.next;
         }
-        prev.next = current
+        prev.next = current.next
     }
     //  value_n_from_end(n) - returns the value of the node at nth position from the end of the list
     value_n_from_end(n) {
-        return this.value_at(this.size - n + 1)
+        return this.value_at(this.size - n - 1)
     }
     //  reverse() - reverses the list
     reverse() {
@@ -173,12 +177,15 @@ class LinkedList {
         if (this.size) {
             let current = this.head, prev = null;
             while (current) {
-                prev = current;
-                current = current.next;
-                if (prev.value === value) {
+                if (current.value === value && prev === null) {
+                    this.head = current.next;
+                    this.size--;
+                } else if (current.value === value) {
                     prev.next = current.next;
                     this.size--;
                 }
+                prev = current;
+                current = current.next;
             }
 
         } else throw "Linked list is empty"
