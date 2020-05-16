@@ -13,8 +13,8 @@ class LinkedList {
         this.size = 0;
     }
 
-    //size() - returns number of data values in list
-    size() {
+    //getSize() - returns number of data values in list
+    getSize() {
         return this.size;
     }
 
